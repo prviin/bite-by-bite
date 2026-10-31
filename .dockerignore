@@ -1,0 +1,9 @@
+data
+backups
+migration
+.env
+.env.*
+.git
+node_modules
+test
+deploy/.env

@@ -1,0 +1,5 @@
+export const nutrientLabels={protein:'Protein',fiber:'Fiber',sugar:'Sugar',fat:'Fat / oils',carbs:'Carbohydrates'};
+export const nutrientKeys=Object.keys(nutrientLabels);
+export function validNutrients(value){return value===undefined||value===null||(typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(k=>nutrientKeys.includes(k))&&nutrientKeys.every(k=>value[k]===undefined||value[k]===null||(Number.isFinite(value[k])&&value[k]>=0&&value[k]<=2000)));}
+export function normalizeNutrients(value){if(!validNutrients(value))throw Error('Nutrient amounts must be between 0 and 2,000 grams.');return Object.fromEntries(nutrientKeys.map(k=>[k,value?.[k]??null]));}
+export function summarizeNutrients(entries){const food=entries.filter(e=>e.type==='food');return {meals:food.length,values:Object.fromEntries(nutrientKeys.map(k=>{const known=food.filter(e=>Number.isFinite(e.nutrients?.[k]));return [k,{grams:known.length?Math.round(known.reduce((sum,e)=>sum+e.nutrients[k],0)*10)/10:null,logged:known.length}];}))};}
